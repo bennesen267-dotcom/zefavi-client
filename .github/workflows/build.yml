@@ -18,7 +18,7 @@ jobs:
           mkdir -p src/main/java/com/zefavi/client src/main/resources
 
           cat > build.gradle <<'EOF'
-          plugins { id 'fabric-loom' version '1.7-SNAPSHOT' }
+          plugins { id 'fabric-loom' version '1.9-SNAPSHOT' }
           version = '1.0.0'
           group = 'com.zefavi.client'
           base { archivesName = 'zefavi-client' }
@@ -73,7 +73,6 @@ jobs:
               public static KeyBinding guiKey;
 
               @Override public void onInitializeClient() {
-                  // 2. ve 3. asamada moduller buraya eklenecek
                   gui = new MainGui();
                   guiKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                       "key.zefavi.gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, "Zefavi"));
@@ -99,25 +98,17 @@ jobs:
                   public MainGui() { super(Text.literal("Zefavi")); }
 
                   @Override public void render(DrawContext ctx, int mx, int my, float d) {
-                      // arkaplan karartma
                       ctx.fill(0, 0, width, height, 0x66000000);
-
-                      // panel golge
                       ctx.fill(panelX - 3, panelY - 3, panelX + W + 3,
                                panelY + 26 + modules.size() * 24 + 6, 0xAA101010);
-                      // panel govde
                       ctx.fill(panelX, panelY, panelX + W,
                                panelY + 26 + modules.size() * 24, 0xFF0A0A14);
-
-                      // ust bar - parlayan mor gradient
                       for (int i = 0; i < 26; i++) {
                           int alpha = 0xFF - (i * 4);
                           int c = (alpha << 24) | (0x9A << 16) | (0x3C << 8) | 0xFF;
                           ctx.fill(panelX, panelY + i, panelX + W, panelY + i + 1, c);
                       }
                       ctx.drawText(textRenderer, "ZEFAVI", panelX + 12, panelY + 9, 0xFFFFFFFF, true);
-
-                      // modul listesi (su an bos)
                       int y = panelY + 30;
                       for (Module m : modules) {
                           int bg = m.enabled ? 0xFF1F0033 : 0xFF12121E;
@@ -161,7 +152,7 @@ jobs:
           sed -i 's/^          //' build.gradle settings.gradle src/main/resources/fabric.mod.json src/main/java/com/zefavi/client/ZefaviClient.java
 
       - name: Gradle wrapper
-        run: gradle wrapper --gradle-version 8.8
+        run: gradle wrapper --gradle-version 8.10
 
       - name: Build
         run: ./gradlew build --no-daemon
