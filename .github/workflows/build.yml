@@ -152,7 +152,7 @@ jobs:
           sed -i 's/^          //' build.gradle settings.gradle src/main/resources/fabric.mod.json src/main/java/com/zefavi/client/ZefaviClient.java
 
       - name: Gradle wrapper
-        run: gradle wrapper --gradle-version 8.10
+        run: gradle wrapper --gradle-version 8.11
 
       - name: Build
         run: ./gradlew build --no-daemon
